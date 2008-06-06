@@ -1,0 +1,4 @@
+name myexp
+comment This experiment contains 2 runs
+run myrun algorithm FCFS key "FCFS"
+run myrun algorithm SJF key "SJF"

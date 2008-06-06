@@ -1,0 +1,5 @@
+#!/bin/csh
+set JARDIR1 = "../jars"
+set JARDIR2 = "./"
+setenv CLASSPATH .:${JARDIR1}/DiskHead.jar:${JARDIR1}/Jeli.jar:${JARDIR2}/DiskHead.jar:${JARDIR2}/Jeli.jar
+java -mx64m DiskHeadDriver

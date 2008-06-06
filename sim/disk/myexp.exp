@@ -1,0 +1,7 @@
+name myexp
+comment Five runs with different algorithms
+run myrun key "FCFS" head FCFS
+run myrun key "SSTF" head SSTF
+run myrun key "SCAN" head SCAN 200
+run myrun key "LOOK" head LOOK
+run myrun key "C-LOOK" head CLOOK

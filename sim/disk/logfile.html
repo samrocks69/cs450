@@ -1,0 +1,339 @@
+<HEAD>
+<TITLE>Disk Head Simulator Log for New User generated Wed Apr 09 13:12:46 CDT 2008</TITLE>
+</HEAD>
+<BODY BGCOLOR=#FFFFFF><H3>Disk Head Simulator Log for New User generated Wed Apr 09 13:12:46 CDT 2008</H3>
+
+<H6>Disk Head Simulation by S. Robbins version 1.02L288 Supported by NSF DUE-0088769 Last modified January 2, 2007 using Jeli L288 last modified March 1, 2007<br>
+See <a href=http://vip.cs.utsa.edu/nsf>http://vip.cs.utsa.edu/nsf</a> for simulator information.<br><br>
+Java version 1.5.0_13 OS Mac OS X version 10.5.2 28365271717
+<br></H6>
+
+<hr>
+
+Configuration file diskheadconfig follows:
+<pre>
+user New User
+quiet
+exp myexp
+run myrun
+
+</pre>
+<hr>
+
+Number of runs is 1<br>
+Run file myrun.run follows:
+<pre>
+name myrun
+comment This is myrun
+start 4
+movement linear 0.5  0.10
+layout uniform 2
+head clook
+interArrival constant 2
+nextBlock uniform 30 40
+firstArrival 2.23
+blockAbsolute
+numBlocks 20
+interArrival uniform 5 15
+nextBlock uniform 100 200
+firstArrival 3.123
+numBlocks 4
+
+</pre>
+
+<hr>
+
+Number of experiments is 1<br>
+Experiment file myexp.exp follows:
+<pre>
+name myexp
+comment Three runs with different algorithms
+run myrun key "FCFS" head FCFS
+run myrun key "SSTF" head SSTF
+run myrun key "C-LOOK" head CLOOK
+
+</pre>
+
+<hr>
+
+<p><hr>
+Wed Apr 09 13:12:49 CDT 2008<p>
+<center><TABLE Border=1>
+<TR>
+<TD Align=center COLSPAN=3></TD>
+<TD ALign=center COLSPAN=2>Seek Movement</TD>
+<TD ALign=center COLSPAN=3>Seek Time</TD>
+<TD ALign=right>Max</TD>
+</TR><TR>
+<TD Align=center>Run</TD>
+<TD ALign=center>Key</TD>
+<TD ALign=center>Layout</TD>
+<TD ALign=center>Algorithm</TD>
+<TD ALign=right>Count</TD>
+<TD ALign=center>Algorithm</TD>
+<TD ALign=right>Total</TD>
+<TD ALign=right>Idle</TD>
+<TD ALign=right>Queue</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>FCFS</td>
+<TD Align=left>Uniform 2</td>
+<TD Align=left>FCFS</td>
+<TD Align=right>24</TD>
+<TD Align=left>Linear .50 .10</td>
+<TD Align=right>    71.73</TD>
+<TD Align=right>     2.23<TD Align=right>10</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>SSTF</td>
+<TD Align=left>Uniform 2</td>
+<TD Align=left>SSTF</td>
+<TD Align=right>24</TD>
+<TD Align=left>Linear .50 .10</td>
+<TD Align=right>    53.42</TD>
+<TD Align=right>     3.02<TD Align=right>8</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>C-LOOK</td>
+<TD Align=left>Uniform 2</td>
+<TD Align=left>C-LOOK</td>
+<TD Align=right>24</TD>
+<TD Align=left>Linear .50 .10</td>
+<TD Align=right>    53.72</TD>
+<TD Align=right>     3.02<TD Align=right>8</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>FCFS</td>
+<TD Align=left>Uniform 2</td>
+<TD Align=left>FCFS</td>
+<TD Align=right>24</TD>
+<TD Align=left>Linear .50 .10</td>
+<TD Align=right>    71.73</TD>
+<TD Align=right>     2.23<TD Align=right>10</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>SSTF</td>
+<TD Align=left>Uniform 2</td>
+<TD Align=left>SSTF</td>
+<TD Align=right>24</TD>
+<TD Align=left>Linear .50 .10</td>
+<TD Align=right>    53.42</TD>
+<TD Align=right>     3.02<TD Align=right>8</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>C-LOOK</td>
+<TD Align=left>Uniform 2</td>
+<TD Align=left>C-LOOK</td>
+<TD Align=right>24</TD>
+<TD Align=left>Linear .50 .10</td>
+<TD Align=right>    53.72</TD>
+<TD Align=right>     3.02<TD Align=right>8</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>FCFS</td>
+<TD Align=left>Uniform 2</td>
+<TD Align=left>FCFS</td>
+<TD Align=right>24</TD>
+<TD Align=left>Linear .50 .10</td>
+<TD Align=right>    71.73</TD>
+<TD Align=right>     2.23<TD Align=right>10</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>SSTF</td>
+<TD Align=left>Uniform 2</td>
+<TD Align=left>SSTF</td>
+<TD Align=right>24</TD>
+<TD Align=left>Linear .50 .10</td>
+<TD Align=right>    53.42</TD>
+<TD Align=right>     3.02<TD Align=right>8</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>C-LOOK</td>
+<TD Align=left>Uniform 2</td>
+<TD Align=left>C-LOOK</td>
+<TD Align=right>24</TD>
+<TD Align=left>Linear .50 .10</td>
+<TD Align=right>    53.72</TD>
+<TD Align=right>     3.02<TD Align=right>8</TD>
+</TR>
+</TR></TABLE></center>
+<p>
+<p>
+<center><TABLE Border=1>
+<TR>
+<TD Align=center COLSPAN=2></TD>
+<TD ALign=center COLSPAN=4>Seek Movement</TD>
+<TD ALign=center COLSPAN=4>Seek Time</TD>
+<TD ALign=center COLSPAN=4>Seek Request Turnaround</TD>
+</TR><TR>
+<TD Align=center>Run</TD>
+<TD ALign=center>Key</TD>
+<TD Align=center>Mean</TD>
+<TD ALign=center>Min</TD>
+<TD ALign=center>Max</TD>
+<TD ALign=center>SD</TD>
+<TD ALign=center>Mean</TD>
+<TD ALign=center>Min</TD>
+<TD ALign=center>Max</TD>
+<TD ALign=center>SD</TD>
+<TD ALign=center>Mean</TD>
+<TD ALign=center>Min</TD>
+<TD ALign=center>Max</TD>
+<TD ALign=center>SD</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>FCFS</td>
+<TD Align=right>    48.29</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>   167.00</TD>
+<TD Align=right>    65.18</TD>
+<TD Align=right>     2.90</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>     8.90</TD>
+<TD Align=right>     3.27</TD>
+</TD>
+<TD Align=right>    20.53</TD>
+<TD Align=right>     2.10</TD>
+<TD Align=right>    40.00</TD>
+<TD Align=right>    13.40</TD>
+</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>SSTF</td>
+<TD Align=right>    34.63</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>   159.00</TD>
+<TD Align=right>    56.94</TD>
+<TD Align=right>     2.10</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>     8.50</TD>
+<TD Align=right>     2.93</TD>
+</TD>
+<TD Align=right>     8.09</TD>
+<TD Align=right>      .50</TD>
+<TD Align=right>    18.20</TD>
+<TD Align=right>     5.78</TD>
+</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>C-LOOK</td>
+<TD Align=right>    34.33</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>   167.00</TD>
+<TD Align=right>    57.74</TD>
+<TD Align=right>     2.11</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>     8.90</TD>
+<TD Align=right>     2.95</TD>
+</TD>
+<TD Align=right>    10.38</TD>
+<TD Align=right>      .50</TD>
+<TD Align=right>    20.19</TD>
+<TD Align=right>     5.85</TD>
+</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>FCFS</td>
+<TD Align=right>    48.29</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>   167.00</TD>
+<TD Align=right>    65.18</TD>
+<TD Align=right>     2.90</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>     8.90</TD>
+<TD Align=right>     3.27</TD>
+</TD>
+<TD Align=right>    20.53</TD>
+<TD Align=right>     2.10</TD>
+<TD Align=right>    40.00</TD>
+<TD Align=right>    13.40</TD>
+</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>SSTF</td>
+<TD Align=right>    34.63</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>   159.00</TD>
+<TD Align=right>    56.94</TD>
+<TD Align=right>     2.10</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>     8.50</TD>
+<TD Align=right>     2.93</TD>
+</TD>
+<TD Align=right>     8.09</TD>
+<TD Align=right>      .50</TD>
+<TD Align=right>    18.20</TD>
+<TD Align=right>     5.78</TD>
+</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>C-LOOK</td>
+<TD Align=right>    34.33</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>   167.00</TD>
+<TD Align=right>    57.74</TD>
+<TD Align=right>     2.11</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>     8.90</TD>
+<TD Align=right>     2.95</TD>
+</TD>
+<TD Align=right>    10.38</TD>
+<TD Align=right>      .50</TD>
+<TD Align=right>    20.19</TD>
+<TD Align=right>     5.85</TD>
+</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>FCFS</td>
+<TD Align=right>    48.29</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>   167.00</TD>
+<TD Align=right>    65.18</TD>
+<TD Align=right>     2.90</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>     8.90</TD>
+<TD Align=right>     3.27</TD>
+</TD>
+<TD Align=right>    20.53</TD>
+<TD Align=right>     2.10</TD>
+<TD Align=right>    40.00</TD>
+<TD Align=right>    13.40</TD>
+</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>SSTF</td>
+<TD Align=right>    34.63</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>   159.00</TD>
+<TD Align=right>    56.94</TD>
+<TD Align=right>     2.10</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>     8.50</TD>
+<TD Align=right>     2.93</TD>
+</TD>
+<TD Align=right>     8.09</TD>
+<TD Align=right>      .50</TD>
+<TD Align=right>    18.20</TD>
+<TD Align=right>     5.78</TD>
+</TD>
+</TR>
+<TD Align=left>myrun</td>
+<TD Align=left>C-LOOK</td>
+<TD Align=right>    34.33</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>   167.00</TD>
+<TD Align=right>    57.74</TD>
+<TD Align=right>     2.11</TD>
+<TD Align=right>     0.00</TD>
+<TD Align=right>     8.90</TD>
+<TD Align=right>     2.95</TD>
+</TD>
+<TD Align=right>    10.38</TD>
+<TD Align=right>      .50</TD>
+<TD Align=right>    20.19</TD>
+<TD Align=right>     5.85</TD>
+</TD>
+</TR>
+</TR></TABLE></center>
+<p>
+<br>
