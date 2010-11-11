@@ -711,11 +711,11 @@ void fprint_help (FILE *st)
 CTAB *cmdp;
 
 for (cmdp = sim_vm_cmd; cmdp && (cmdp->name != NULL); cmdp++) {
-    if (cmdp->help) fprintf (st, cmdp->help);
+    if (cmdp->help) fprintf (st, "%s", cmdp->help);
     }
 for (cmdp = cmd_table; cmdp && (cmdp->name != NULL); cmdp++) {
     if (cmdp->help && (!sim_vm_cmd || !find_ctab (sim_vm_cmd, cmdp->name)))
-        fprintf (st, cmdp->help);
+        fprintf (st, "%s", cmdp->help);
     }
 return;
 }
@@ -730,8 +730,8 @@ if (*cptr) {
     cptr = get_glyph (cptr, gbuf, 0);
     if (*cptr) return SCPE_2MARG;
     if (cmdp = find_cmd (gbuf)) {
-        printf (cmdp->help);
-        if (sim_log) fprintf (sim_log, cmdp->help);
+        printf ("%s", cmdp->help);
+        if (sim_log) fprintf (sim_log, "%s", cmdp->help);
         }
     else return SCPE_ARG;
     }
