@@ -218,8 +218,8 @@
   (Thread/sleep animation-sleep-ms)
   nil)
 
-;(send-off animator animation)
-
-;(dorun (map #(send-off % behave) baboons))
-
-;(dorun (map #(send-off % behave-with-drain) baboons))
+(comment
+  (send-off animator animation)
+  (dorun (map #(send-off % behave) baboons))
+  (dorun (map #(send-off % behave-with-drain) baboons))
+)
