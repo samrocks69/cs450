@@ -4,34 +4,39 @@
 (def num-baboons 30)
 
 ;; amount of time baboons sleep (+random)
-(def baboon-sleep  100)
+(def baboon-sleep  1000)
 
 ;; maximum # of baboons that rope can support (in one direction)
 (def rope-capacity 5)
 
-;; rope is a set of baboons
-;; can also have :draining metadata
-(def rope (ref #{}))
+;; rope, east-side, and west-side are all sets of baboons.
+;; a baboon can only be in one place at a time!
+(def rope (ref #{})) ; can also have "draining" metadata
+(def east-side (ref #{}))
+(def west-side (ref #{}))
 
 ;; baboons have :id identifier,
-;; :heading is :east or :west
-;; :crossing is true/false (true if I'm on the rope)
-(defstruct baboon :id :heading :crossing)
+;; :loc is :west, :east, or :rope
+(defstruct baboon :id :loc)
 
 (defn create-baboons
   "Create a sequence of baboon agents with random headings.
    Agent state is an instance of the baboon struct."
   [n]
-  (reduce (fn [s x] 
-            (conj s (agent (struct baboon 
-                                   x
-                                   ([:west :east] (rand-int 2)) 
-                                   false))))
+  (reduce (fn [s x]
+	    (let [side     ([:west :east] (rand-int 2))
+		  side-ref (if (= side :west) west-side east-side)
+		  agt      (agent (struct baboon x side))]
+	      (dosync (alter side-ref conj @agt))
+	      (conj s agt)))
           []
           (range n)))
 
 ;; our baboons!
 (def baboons (create-baboons num-baboons))
+
+(defn side-ref [name]
+  (if (= :west name) west-side east-side))
 
 (defn reverse-heading
   "Returns reverse direction heading -- :east for :west, and v.v."
@@ -42,26 +47,32 @@
   "Defines baboon behavior.
    Baboons will:
     - sleep for a while
-    - if currently crossing, jump off the rope and switch headings
-    - else, try to cross"
+    - if currently on the rope, jump off
+    - else, try to get on the rope"
   [baboon]
   (Thread/sleep (+ baboon-sleep (rand-int baboon-sleep)))
   (dosync
     (when running
       (send-off *agent* behave))
-    (let [heading (baboon :heading)]
-      (if (baboon :crossing)
-        (do
-          (alter rope disj baboon)
-          (assoc baboon 
-                 :heading (reverse-heading heading)
-                 :crossing false))
-        (if (and (< (count @rope) rope-capacity) 
-                 (every? #(= (:heading %) heading) @rope))
-          (let [me-crossing (assoc baboon :crossing true)]
-            (alter rope conj me-crossing)
-            me-crossing)
-          baboon)))))
+    (let [from (:loc baboon)
+	  to   (reverse-heading from)
+	  n-crossing (count @rope)]
+      (cond
+       ;; if I'm on the rope, get off & switch locations
+       (contains? @rope baboon)
+       (do (alter rope disj baboon)
+	   (alter (side-ref to) conj (assoc baboon :loc to))
+	   (assoc baboon :loc to))
+       ;; if the rope is empty, or everyone on the rope is from my side
+       ;; and the rope isn't at capacity, get on
+       (and (< n-crossing rope-capacity)
+	    (every? #(= (:loc %) from) @rope))
+       (do (alter rope conj baboon)
+	   (alter (side-ref from) disj baboon)
+	   baboon)
+       ;; otherwise, nothing changes
+       :else
+       baboon))))
 
 (defn behave-with-drain [baboon]
   "Defines baboon behavior.
@@ -72,28 +83,30 @@
   (dosync
     (when running
       (send-off *agent* behave-with-drain))
-    (let [heading (baboon :heading)]
-      (if (baboon :crossing)
-        (do
-          (alter rope disj baboon)
-          (assoc baboon 
-                 :heading (reverse-heading heading)
-                 :crossing false))
-        (do
-          (if (= 0 (count @rope))
-            (alter-meta! rope assoc :draining false))
-          (cond
-            (= rope-capacity (count @rope))
-            (do
-              (alter-meta! rope assoc :draining true)
-              baboon)
-            (and (not (:draining (meta rope)))
-                 (every? #(= heading (:heading %)) @rope))
-            (do
-              (alter rope conj (assoc baboon :crossing true))
-              (assoc baboon :crossing true))
-            :else
-            baboon))))))
+    (let [from (:loc baboon)
+	  to   (reverse-heading from)
+	  n-crossing (count @rope)]
+      ;; if there's nobody on the rope, no need to drain it
+      (if (= 0 n-crossing)
+	(alter-meta! rope assoc :draining false))
+      (cond
+       ;; if I'm on the rope, get off & switch locations
+       (contains? @rope baboon)
+       (do (alter rope disj baboon)
+	   (alter (side-ref to) conj (assoc baboon :loc to))
+	   (assoc baboon :loc to))
+       ;; if the rope is not draining, and I can get on it, get on
+       (and (not (:draining (meta rope)))
+	    (< n-crossing rope-capacity)
+	    (every? #(= (:loc %) from) @rope))
+       (do (alter rope conj baboon)
+	   (if (= (count @rope) rope-capacity)
+	     (alter-meta! rope assoc :draining true))
+	   (alter (side-ref from) disj baboon)
+	   baboon)
+       ;; otherwise, wait
+       :else
+       baboon))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; UI stuff follows ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -122,7 +135,7 @@
 ;; draw a single baboon -- color based on heading
 (defn render-baboon [baboon ^Graphics g x y]
   (doto g
-    (.setColor (if (= :east (:heading baboon)) 
+    (.setColor (if (= :west (:loc baboon)) 
                  (new Color 0x404040)
                  (new Color 0x930c08)))
     (.fill3DRect x y scale scale true)
@@ -152,7 +165,7 @@
     (draw-centered-string "(draining...)" 
                           g x (+ y 30) 
                           (* scale rope-capacity) scale))
-  (when-let [heading (:heading (first rope))]
+  (when-let [heading (reverse-heading (:loc (first rope)))]
     (render-direction heading g x (- y 18))
     (reduce (fn [baboons offset] 
               (render-baboon (first baboons) g (+ x offset) y)
@@ -174,22 +187,20 @@
     ; take a snapshot of the world before running the let body, to ensure
     ; we're drawing a consistent state, and we're not stopping everyone
     ; while painting ...
-    (let [[baboons rope-meta rope]
+    (let [[west-side east-side rope rope-meta]
           (dosync
-            [(map deref baboons) (meta rope) @rope])]
-      (dorun 
-        (map (fn [baboon]
-               (let [x (if (= (:heading baboon) :east) 0 (- width scale))
-                     y (* (:id baboon) scale)]
-                 (when-not (:crossing baboon)
-                   (render-baboon baboon bg x y))))
-             baboons))
-      (render-rope (with-meta rope rope-meta)
-                   bg 
-                   (int (/ (- width (* rope-capacity scale)) 2))
-                   (int (/ (- height scale) 2))))
-    (. g (drawImage img 0 0 nil))
-    (. bg (dispose))))
+	   [@west-side @east-side @rope (meta rope)])]
+      (dorun
+       (map #(render-baboon % bg 0 (* (:id %) scale)) west-side))
+      (dorun
+       (map #(render-baboon % bg (- width scale) (* (:id %) scale)) east-side))
+      (when-not (empty? rope)
+	(render-rope (with-meta rope rope-meta)
+		     bg 
+		     (int (/ (- width (* rope-capacity scale)) 2))
+		     (int (/ (- height scale) 2)))))
+    (.drawImage g img 0 0 nil)
+    (.dispose bg)))
 
 (def panel (doto 
              (proxy [JPanel] []
@@ -207,8 +218,8 @@
   (Thread/sleep animation-sleep-ms)
   nil)
 
-(send-off animator animation)
+;(send-off animator animation)
 
-(dorun (map #(send-off % behave) baboons))
+;(dorun (map #(send-off % behave) baboons))
 
-(dorun (map #(send-off % behave-with-drain) baboons))
+;(dorun (map #(send-off % behave-with-drain) baboons))
